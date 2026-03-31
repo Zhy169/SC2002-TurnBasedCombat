@@ -328,7 +328,7 @@ direction TB
     }
 
     class EntityWave {
-        -AllCharacters : Combatant[]
+        -allCharacters : Combatant[]
         -numOfCharacters : int
         -waveNum : int
         +addToWave()
