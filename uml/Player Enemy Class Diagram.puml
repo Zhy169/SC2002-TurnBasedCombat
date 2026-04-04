@@ -126,6 +126,36 @@ direction TB
         -speed : SpeedAttribute
         +action()
     }
+    
+    class DamageCalculator {
+        -attacker : Combatant
+        -defender : Combatant
+        +DamageCalculator(attacker : Combatant, defender : Combatant)
+        +executeDamage() : int
+    }
+
+    class DefendAction {
+        +execute(performer : Combatant, targets : List~Combatant~) : void
+        +getName() : String
+    }
+
+    class UseItem {
+        -item : Item
+        +UseItem(item : Item)
+        +execute(performer : Combatant, targets : List~Combatant~) : void
+        +getName() : String
+    }
+
+    class BasicAttack {
+        +execute(performer : Combatant, targets : List~Combatant~) : void
+        +getName() : String
+    }
+
+    class ShieldBash {
+        +execute(performer : Combatant, targets : List~Combatant~) : void
+        +getName() : String
+    }
+
 
     class SpecialStatus {
         -statusName : String
