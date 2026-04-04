@@ -1,6 +1,3 @@
-package model.combat;
-
-import model.combatant.Combatant;
 
 public class DamageCalculator {
     private final Combatant attacker;
