@@ -4,7 +4,7 @@ public class ShieldBash implements Action {
     public void execute(Combatant performer, List<Combatant> targets) {
         Combatant target = targets.get(0);
         new DamageCalculator(performer, target).executeDamage();
-        target.addEffect(new Stun(2));
+        new Stun(target, 2);
     }
     @Override
     public String getName() { return "Shield Bash"; }

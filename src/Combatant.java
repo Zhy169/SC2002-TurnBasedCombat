@@ -16,10 +16,20 @@ public abstract class Combatant {
         this.speed = new speedAttribute(speed);
     }
 
+    private LocalTriggers localTriggerList = new LocalTriggers();
+
+    public LocalTriggers getLocalTriggerList() {
+        return  this.localTriggerList;
+    }
+
     protected List<StatusEffect> activeEffects = new ArrayList<>();
 
     public void addEffect(StatusEffect effect) {
         activeEffects.add(effect);
+    }
+
+    public void removeEffect(StatusEffect effect) {
+        activeEffects.remove(effect);
     }
 
     public boolean isStunned() {
@@ -27,23 +37,13 @@ public abstract class Combatant {
     }
 
     public int getTotalAttack() {
-        int bonus = activeEffects.stream()
-                .filter(e -> e instanceof AttackBuffEffect)
-                .mapToInt(e -> ((AttackBuffEffect) e).getAmount())
-                .sum();
-        return this.attack.getValue() + bonus;
-    }
+        int attack = this.attack.getValue();
 
-    public void updateEffects() {
-        // Tick down durations
-        for (StatusEffect effect : activeEffects) {
-            effect.decrementDuration(); // duration goes from 2 -> 1, then 1 -> 0
+        for (StatusEffect status : localTriggerList.getLocalTriggers(Local_Trigger_Types.ON_MODIFY_ATTACK)) {
+            attack = status.onModifyAttack(attack);
+            }
+        return attack;
         }
-
-        // Remove expired effects (duration == 0)
-        // Note: If you used -1 for permanent buffs, they won't be removed
-        activeEffects.removeIf(effect -> effect.isExpired());
-    }
 
     // Update basicAttack to use getTotalAttack()
     public void basicAttack(Combatant target) {
@@ -74,14 +74,20 @@ public abstract class Combatant {
     }
 
     public int getTotalDefense() {
-        int bonus = 0;
-        // Look through all active effects for any Defense Buffs
-        for (StatusEffect effect : activeEffects) {
-            if (effect instanceof DefenseBuffEffect) {
-                bonus += ((DefenseBuffEffect) effect).getBonusAmount();
+        int defence = this.defense.getValue();
+
+        for (StatusEffect status : localTriggerList.getLocalTriggers(Local_Trigger_Types.ON_MODIFY_DEFENCE)) {
+            defence = status.onModifyDefence(defence);
             }
+        return defence;
         }
-        // Return the base stat + the temporary buff
-        return this.defense.getValue() + bonus;
-    }
+
+    public int getTotalSpeed() {
+        int speed = this.speed.getValue();
+
+        for (StatusEffect status : localTriggerList.getLocalTriggers(Local_Trigger_Types.ON_MODIFY_SPEED)) {
+            speed = status.onModifySpeed(speed);
+            }
+        return speed;
+        }
 }

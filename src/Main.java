@@ -5,6 +5,7 @@ public class Main {
         Scanner scanner = new Scanner(System.in);
         BattleDisplay display = new BattleDisplay();
         TurnOrderStrategy turnStrategy = new TurnOrderStrategy();
+        new GlobalTriggers();
 
         // NAME & CLASS SELECTION
         System.out.print("Enter your Hero's name: ");
@@ -58,10 +59,16 @@ public class Main {
             participants.addAll(enemies);
             turnStrategy.sortBySpeed(participants);
 
+            //EFFECTS UPDATE (Start of Round)
+            GlobalTriggers.getGlobalTriggerObject().trigger(Global_Trigger_Types.ON_ROUND_START);
+
             display.showTurnOrder(participants);
 
             for (Combatant c : participants) {
                 if (c.getHealth().isDead() || turnStrategy.isGameOver(player, enemies)) continue;
+
+                // START OF TURN TRIGGERS
+                c.getLocalTriggerList().trigger(Local_Trigger_Types.ON_TURN_START);
 
                 if (c instanceof Player) {
                     handlePlayerTurn((Player) c, enemies, scanner, display);
@@ -74,16 +81,13 @@ public class Main {
                         new BasicAttack().execute(c, List.of(player));
                     }
                 }
+
+                // END OF TURN TRIGGERS
+                c.getLocalTriggerList().trigger(Local_Trigger_Types.ON_TURN_END);
             }
 
             // EFFECTS UPDATE (End of Round)
-            player.updateEffects();
-            player.updateCooldown();
-            for (Enemy e : enemies) {
-                e.updateEffects();
-            }
-
-            enemies.removeIf(e -> e.getHealth().isDead());
+            GlobalTriggers.getGlobalTriggerObject().trigger(Global_Trigger_Types.ON_ROUND_END);
             roundCounter++;
         }
 

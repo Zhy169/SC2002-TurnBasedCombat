@@ -7,7 +7,7 @@ public class TurnOrderStrategy {
     // Sorts combatants by speed (Highest first).
     // If speeds are equal, it maintains the current list order.
     public void sortBySpeed(List<Combatant> participants) {
-        participants.sort(Comparator.comparingInt((Combatant c) -> c.getSpeed().getValue()).reversed());
+        participants.sort(Comparator.comparingInt((Combatant c) -> c.getTotalSpeed()).reversed());
     }
 
 

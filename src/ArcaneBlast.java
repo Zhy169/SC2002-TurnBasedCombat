@@ -10,7 +10,7 @@ public class ArcaneBlast implements Action {
             if (target.getHealth().isDead() && hpBefore > 0) kills++;
         }
         if (kills > 0) {
-            performer.addEffect(new AttackBuffEffect(kills * 10, -1));
+            new ArcaneBlastStatus(performer, 99);
             System.out.println(performer.getName() + " gains " + (kills * 10) + " attack.");
         }
     }

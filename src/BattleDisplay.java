@@ -10,14 +10,14 @@ public class BattleDisplay {
     public void showStats(Player p, List<Enemy> enemies) {
         System.out.println("\n--- PARTY STATUS ---");
         System.out.printf("[PLAYER] %-10s | HP: %-3d | ATK: %-3d | DEF: %-2d%n",
-                p.getName(), p.getHealth().getValue(), p.getAttack().getValue(), p.getDefense().getValue());
+                p.getName(), p.getHealth().getValue(), p.getTotalAttack(), p.getTotalDefense());
 
         System.out.println("\n--- ENEMIES ---");
         for (int i = 0; i < enemies.size(); i++) {
             Enemy e = enemies.get(i);
             // Displaying (i + 1) so the user sees 1, 2, 3
             System.out.printf("%d. %-12s | HP: %-3d | ATK: %-3d | DEF: %-2d%n",
-                    (i + 1), e.getName(), e.getHealth().getValue(), e.getAttack().getValue(), e.getDefense().getValue());
+                    (i + 1), e.getName(), e.getHealth().getValue(), e.getTotalAttack(), e.getTotalDefense());
         }
     }
 
@@ -36,7 +36,7 @@ public class BattleDisplay {
     public void showTurnOrder(List<Combatant> order) {
         System.out.print("TURN ORDER: ");
         for (int i = 0; i < order.size(); i++) {
-            System.out.print(order.get(i).getName() + " (" + order.get(i).getSpeed().getValue() + ")");
+            System.out.print(order.get(i).getName() + " (" + order.get(i).getTotalSpeed() + ")");
             if (i < order.size() - 1) System.out.print(" -> ");
         }
         System.out.println("\n");
