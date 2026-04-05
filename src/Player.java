@@ -1,6 +1,7 @@
 public abstract class Player extends Combatant {
     protected int specialCooldown = 0;
     protected Action specialSkill;
+    private Bag bag = new Bag();
 
     public Player(String name, int health, int attack, int defense, int speed, Action skill) {
         super(name, health, attack, defense, speed);
@@ -17,6 +18,8 @@ public abstract class Player extends Combatant {
     }
 
     public void updateCooldown() { if (specialCooldown > 0) specialCooldown--; }
+
+    public Bag getBag() { return bag; }
 
     public int getSpecialCooldown() {
         return specialCooldown;
